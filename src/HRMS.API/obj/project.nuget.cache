@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "1k6wuFoNQEQ=",
+  "success": true,
+  "projectFilePath": "c:\\Users\\El-walid\\Desktop\\HRMS\\src\\HRMS.API\\HRMS.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\El-walid\\.nuget\\packages\\mediatr\\12.5.0\\mediatr.12.5.0.nupkg.sha512",
+    "C:\\Users\\El-walid\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\El-walid\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+    "C:\\Users\\El-walid\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512"
+  ],
+  "logs": []
+}

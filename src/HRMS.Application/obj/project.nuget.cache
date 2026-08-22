@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "tKL1/tTixbk=",
+  "success": true,
+  "projectFilePath": "c:\\Users\\El-walid\\Desktop\\HRMS\\src\\HRMS.Application\\HRMS.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\El-walid\\.nuget\\packages\\mediatr\\12.5.0\\mediatr.12.5.0.nupkg.sha512",
+    "C:\\Users\\El-walid\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
+    "C:\\Users\\El-walid\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
