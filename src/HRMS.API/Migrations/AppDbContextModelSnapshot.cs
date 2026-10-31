@@ -28,11 +28,11 @@ namespace HRMS.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("CheckIn")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly?>("CheckIn")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime?>("CheckOut")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly?>("CheckOut")
+                        .HasColumnType("time");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
@@ -154,11 +154,15 @@ namespace HRMS.API.Migrations
 
             modelBuilder.Entity("HRMS.API.Entities.EmployeeSchedule", b =>
                 {
-                    b.Property<Guid>("EmployeeId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ShiftId")
                         .HasColumnType("uniqueidentifier");
@@ -166,14 +170,14 @@ namespace HRMS.API.Migrations
                     b.Property<Guid>("SiteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EmployeeId", "Date", "ShiftId", "SiteId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ShiftId");
 
                     b.HasIndex("SiteId");
+
+                    b.HasIndex("EmployeeId", "Date", "ShiftId", "SiteId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeSchedules");
                 });
@@ -234,6 +238,44 @@ namespace HRMS.API.Migrations
                     b.HasIndex("JobId");
 
                     b.ToTable("JobQualifications");
+                });
+
+            modelBuilder.Entity("HRMS.API.Entities.OpenShift", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClaimedByEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReleasedByEmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SiteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OpenShifts");
                 });
 
             modelBuilder.Entity("HRMS.API.Entities.PasswordResetOtp", b =>
@@ -348,50 +390,6 @@ namespace HRMS.API.Migrations
                     b.ToTable("Requests");
                 });
 
-            modelBuilder.Entity("HRMS.API.Entities.RequestShiftSwap", b =>
-                {
-                    b.Property<Guid>("FromEmployeeScheduleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToEmployeeScheduleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateOnly>("FromEmployeeScheduleDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("FromEmployeeScheduleEmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FromEmployeeScheduleShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FromEmployeeScheduleSiteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("ToEmployeeScheduleDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("ToEmployeeScheduleEmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToEmployeeScheduleShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ToEmployeeScheduleSiteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FromEmployeeScheduleId", "ToEmployeeScheduleId");
-
-                    b.HasIndex("FromEmployeeScheduleEmployeeId", "FromEmployeeScheduleDate", "FromEmployeeScheduleShiftId", "FromEmployeeScheduleSiteId");
-
-                    b.HasIndex("ToEmployeeScheduleEmployeeId", "ToEmployeeScheduleDate", "ToEmployeeScheduleShiftId", "ToEmployeeScheduleSiteId");
-
-                    b.ToTable("ShiftSwapRequests");
-                });
-
             modelBuilder.Entity("HRMS.API.Entities.Shift", b =>
                 {
                     b.Property<Guid>("Id")
@@ -424,11 +422,11 @@ namespace HRMS.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Latitude")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
 
-                    b.Property<string>("Longitude")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -436,6 +434,27 @@ namespace HRMS.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("HRMS.API.Entities.SwapRequest", b =>
+                {
+                    b.Property<Guid>("FromEmployeeScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ToEmployeeScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("FromEmployeeScheduleId", "ToEmployeeScheduleId");
+
+                    b.HasIndex("ToEmployeeScheduleId");
+
+                    b.ToTable("SwapRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -758,18 +777,18 @@ namespace HRMS.API.Migrations
                     b.Navigation("SickLeaveRequest");
                 });
 
-            modelBuilder.Entity("HRMS.API.Entities.RequestShiftSwap", b =>
+            modelBuilder.Entity("HRMS.API.Entities.SwapRequest", b =>
                 {
                     b.HasOne("HRMS.API.Entities.EmployeeSchedule", "FromEmployeeSchedule")
                         .WithMany()
-                        .HasForeignKey("FromEmployeeScheduleEmployeeId", "FromEmployeeScheduleDate", "FromEmployeeScheduleShiftId", "FromEmployeeScheduleSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("FromEmployeeScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("HRMS.API.Entities.EmployeeSchedule", "ToEmployeeSchedule")
                         .WithMany()
-                        .HasForeignKey("ToEmployeeScheduleEmployeeId", "ToEmployeeScheduleDate", "ToEmployeeScheduleShiftId", "ToEmployeeScheduleSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ToEmployeeScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FromEmployeeSchedule");

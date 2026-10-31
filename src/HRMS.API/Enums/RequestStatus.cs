@@ -1,7 +1,11 @@
 namespace HRMS.API.Enums;
-public enum RequestStatus
+public enum ShiftStatus
 {
-    Pending,
-    Approved,
-    Rejected
+    Nothing,
+    Open,
+    PendingSwap,
+    swapped,
+    claimed
 }
+
+

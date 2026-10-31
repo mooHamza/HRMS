@@ -5,7 +5,7 @@ public class Request : BaseEntity
 {
     public RequestTypes RequestType { get; set; }
 
-    public RequestStatus Status { get; set; }
+    // public RequestStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

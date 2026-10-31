@@ -10,6 +10,7 @@ public class AppDbContext : IdentityDbContext<Employee, IdentityRole<Guid>, Guid
     }
 
     public DbSet<Shift> Shifts { get; set; }
+    public DbSet<OpenShift> OpenShifts { get; set; }
     public DbSet<Attendance> Attendences { get; set; }
     public DbSet<EmployeeSchedule> EmployeeSchedules { get; set; }
     public DbSet<Site> Sites { get; set; }
@@ -21,7 +22,7 @@ public class AppDbContext : IdentityDbContext<Employee, IdentityRole<Guid>, Guid
     public DbSet<OvertimeRequest> OvertimeRequests { get; set; }
     public DbSet<SickLeaveRequest> SickLeaveRequests { get; set; }
     public DbSet<RemoteWorkRequest> RemoteWorkRequests { get; set; }
-    public DbSet<RequestShiftSwap> ShiftSwapRequests { get; set; }
+    public DbSet<SwapRequest> SwapRequests { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
     public DbSet<PasswordResetSession> PasswordResetSessions { get; set; }
@@ -29,9 +30,36 @@ public class AppDbContext : IdentityDbContext<Employee, IdentityRole<Guid>, Guid
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<EmployeeSchedule>()
-        .HasKey(es => new { es.EmployeeId, es.Date,es.ShiftId, es.SiteId });
-        modelBuilder.Entity<RequestShiftSwap>()
+    modelBuilder.Entity<EmployeeSchedule>(entity =>
+{
+   entity.HasKey(x => x.Id);
+
+    // Prevent duplicate schedules for the same employee,
+    // date, shift, and site
+    entity.HasIndex(x => new
+    {
+        x.EmployeeId,
+        x.Date,
+        x.ShiftId,
+        x.SiteId
+    }).IsUnique();
+});
+
+modelBuilder.Entity<SwapRequest>(entity =>
+{
+    entity.HasKey(x => x.Id);
+
+    entity.HasOne(x => x.FromEmployeeSchedule)
+        .WithMany()
+        .HasForeignKey(x => x.FromEmployeeScheduleId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    entity.HasOne(x => x.ToEmployeeSchedule)
+        .WithMany()
+        .HasForeignKey(x => x.ToEmployeeScheduleId)
+        .OnDelete(DeleteBehavior.Restrict);
+});
+        modelBuilder.Entity<SwapRequest>()
         .HasKey(r => new { r.FromEmployeeScheduleId, r.ToEmployeeScheduleId });
 
 

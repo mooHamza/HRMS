@@ -7,6 +7,7 @@ public class Employee : IdentityUser<Guid>
 
     public string? FName { get; set; }
     public string? SName { get; set; }
+    public EmployeeLevel Level {get;set;}
     public bool MustChangePassword { get; set; } = true;
 
     public Guid JobId { get; set; }

@@ -1,3 +1,5 @@
+using HRMS.API.Enums;
+
 namespace HRMS.API.Entities;
 
 public class EmployeeSchedule : BaseEntity

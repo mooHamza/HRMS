@@ -1,12 +1,14 @@
+
 using HRMS.API.common;
 using HRMS.API.Data;
+using HRMS.API.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRMS.API.Features.Schadule.Queries;
 
 public class GetEmployeeSchaduleQueryHandler(
-    AppDbContext _context
+    AppDbContext context
 ) : IRequestHandler<
     GetEmployeeSchaduleQuery,
     Result<List<GetEmployeeSchaduleResponse>>>
@@ -15,10 +17,14 @@ public class GetEmployeeSchaduleQueryHandler(
         GetEmployeeSchaduleQuery request,
         CancellationToken cancellationToken)
     {
-        var employeeSchedule = await _context.EmployeeSchedules
+        var schedules = await context.EmployeeSchedules
+            .AsNoTracking()
             .Where(es => es.EmployeeId == request.EmployeeId)
+            .OrderBy(es => es.Date)
             .Select(es => new GetEmployeeSchaduleResponse(
-                request.EmployeeId,
+                es.Id,
+                es.EmployeeId,
+                $"{es.Employee!.FName} {es.Employee!.SName}",
                 es.Employee!.Job!.Title ?? string.Empty,
                 es.Date,
                 es.Site!.Name ?? string.Empty,
@@ -30,13 +36,13 @@ public class GetEmployeeSchaduleQueryHandler(
             ))
             .ToListAsync(cancellationToken);
 
-        if (employeeSchedule.Count == 0)
+        if (schedules.Count == 0)
         {
             return Result<List<GetEmployeeSchaduleResponse>>.Failure(
-                $"There is no schedule found for the employee with Id {request.EmployeeId}."
+                $"There is no schedule found for employee {request.EmployeeId}."
             );
         }
 
-        return Result<List<GetEmployeeSchaduleResponse>>.Success(employeeSchedule);
+        return Result<List<GetEmployeeSchaduleResponse>>.Success(schedules);
     }
 }
